@@ -9,10 +9,14 @@ public class GameController : MonoBehaviour
     
     public TowerController selectedTower;
 
+    public KeyCode sellTowerKey;
+
     public bool spawnEnemies;
     public float enemySpawnDelay; //How long to wait between enemy spawns
     public List<GameObject> enemyPrefabs;
     public Transform enemiesParent;
+
+    public bool isPlacingTower;
 
     private void Start()
     {

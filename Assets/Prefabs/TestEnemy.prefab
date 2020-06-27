@@ -140,6 +140,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  moneyDrop: 50
+  moneyDrop: 30
   damage: 1
   isDying: 0

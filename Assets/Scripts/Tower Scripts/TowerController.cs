@@ -7,9 +7,12 @@ public class TowerController : MonoBehaviour
 {
     public GameController gc;
     public int type; //Type of tower; 0 = machine gun
+    public int price;
 
     public GameObject modelRotateChild; //The gameobject to rotate to face enemies
     public Image rangeImg; //The tower's range UI child
+
+    public bool isActive = false; //If false, tower wont shoot, rotate, etc
 
     public List<GameObject> enemiesInRange;
     public GameObject target;
@@ -21,6 +24,9 @@ public class TowerController : MonoBehaviour
     public float shootDelay; //How long between each shot
     public GameObject bulletPrefab;
     public bool isShooting;
+
+    public List<GameObject> objectsInSpace; //While being placed, any towers/objects intersecting with this tower will be added to this list; If this list is empty, tower can be placed
+    public List<GameObject> towersInSynergyDistance; //Towers within the distance needed to synergise with this tower
 
     private void Awake()
     {
@@ -35,8 +41,22 @@ public class TowerController : MonoBehaviour
             UpdateTarget();
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape) && uiEnabled)
+        if(Input.GetKeyDown(KeyCode.Escape) && uiEnabled && isActive)
             ToggleUI();
+
+        if(Input.GetKeyDown(gc.sellTowerKey) && uiEnabled && isActive)
+            SellTower(0.5f);
+    }
+
+    void SellTower(float priceMultiplier)
+    {
+        gc.money += (int) (price * priceMultiplier); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
+        gc.selectedTower = null;
+
+        foreach (GameObject tower in towersInSynergyDistance) //Remove this tower from others' synergy lists
+            tower.GetComponent<TowerController>().UpdateSynergyList(gameObject, false);
+
+        Destroy(gameObject);
     }
 
     void LateUpdate() //Runs at the end of every frame
@@ -55,7 +75,8 @@ public class TowerController : MonoBehaviour
 
     private void OnMouseDown() //When tower's box collider is clicked on
     {
-        ToggleUI();
+        if(isActive && !gc.isPlacingTower)
+            ToggleUI();
     }
 
     public void ToggleUI()
@@ -99,19 +120,53 @@ public class TowerController : MonoBehaviour
 
     public void UpdateTarget() //Called whenever the tower's available targets changes
     {
-        bool shouldStartShooting = false;
-        if (target == null)
-            shouldStartShooting = true;
-
-        if (enemiesInRange.Count > 0)
+        if(isActive)
         {
-            //Target latest enemy
-            while (enemiesInRange[0] == null || enemiesInRange[0].GetComponent<EnemyController>().isDying)
-                enemiesInRange.RemoveAt(0);
-            target = enemiesInRange[0];
-        }
+            bool shouldStartShooting = false;
+            if (target == null)
+                shouldStartShooting = true;
 
-        if(shouldStartShooting)
-            StartCoroutine(ShootTimer());
+            if (enemiesInRange.Count > 0)
+            {
+                //Target latest enemy
+                while (enemiesInRange[0] == null || enemiesInRange[0].GetComponent<EnemyController>().isDying)
+                    enemiesInRange.RemoveAt(0);
+                if (enemiesInRange.Count > 0) //If there is an enemy to target
+                    target = enemiesInRange[0];
+                else
+                    target = null;
+            }
+
+            if (shouldStartShooting)
+                StartCoroutine(ShootTimer());
+        }
+    }
+
+    public void UpdateObjectsInSpace(GameObject obstructor, bool addToRange) //A list of objects in this tower's space (meaning this tower cant be placed there)
+    {
+        if(addToRange)
+            objectsInSpace.Add(obstructor);
+        else
+            objectsInSpace.Remove(obstructor);
+        UpdateRangeTint();
+    }
+
+    public void UpdateSynergyList(GameObject tower, bool addToRange) //The list of towers within this tower's synergy distance
+    {
+        if (addToRange)
+            towersInSynergyDistance.Add(tower);
+        else
+            towersInSynergyDistance.Remove(tower);
+        UpdateRangeTint();
+    }
+
+    public void UpdateRangeTint()
+    {
+        if (objectsInSpace.Count > 0)
+            rangeImg.color = Color.red;
+        else if (towersInSynergyDistance.Count > 0)
+            rangeImg.color = Color.blue;
+        else
+            rangeImg.color = Color.white;
     }
 }
