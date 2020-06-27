@@ -30,7 +30,7 @@ public class EnemyController : MonoBehaviour
 
     void PreDeath()
     {
-        GameObject.FindObjectOfType<GameController>().money += moneyDrop;
+        GameObject.FindObjectOfType<GameController>().UpdateMoney(moneyDrop, true);
         isDying = true;
     }
 

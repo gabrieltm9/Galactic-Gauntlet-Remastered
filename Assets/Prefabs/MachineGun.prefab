@@ -58,7 +58,7 @@ MonoBehaviour:
   target: {fileID: 0}
   rotateStrength: 20
   uiEnabled: 1
-  shootDelay: 0.25
+  shootDelay: 0.15
   bulletPrefab: {fileID: 4179600736546488068, guid: 5147f515bd43af245aa3f9411c76fa0a,
     type: 3}
   isShooting: 0

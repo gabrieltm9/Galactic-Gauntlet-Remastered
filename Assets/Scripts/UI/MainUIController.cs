@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MainUIController : MonoBehaviour
 {
     public GameController gc;
 
     public GameObject buyMenu;
+    public TMP_Text moneyTxt;
 
     public List<GameObject> towerPrefabs; //0 = machine gun
     public Transform towersParent;
@@ -20,7 +22,7 @@ public class MainUIController : MonoBehaviour
         {
             gc.isPlacingTower = true;
             buyMenu.SetActive(false);
-            gc.money -= price;
+            gc.UpdateMoney(price, false);
             towerBeingPlaced = Instantiate(towerPrefabs[id], transform.position, transform.rotation, towersParent);
             if (gc.selectedTower != null)
                 gc.selectedTower.ToggleUI();
@@ -45,7 +47,7 @@ public class MainUIController : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Escape)) //Cancel place
             {
-                gc.money += towerBeingPlaced.GetComponent<TowerController>().price;
+                gc.UpdateMoney(towerBeingPlaced.GetComponent<TowerController>().price, true);
                 gc.selectedTower = null;
                 gc.isPlacingTower = false;
                 buyMenu.SetActive(true);

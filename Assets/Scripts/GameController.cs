@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -7,6 +8,7 @@ public class GameController : MonoBehaviour
     public int health = 20;
     public int money = 500;
     
+    public MainUIController mUI;
     public TowerController selectedTower;
 
     public KeyCode sellTowerKey;
@@ -37,5 +39,14 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(enemySpawnDelay);
             Instantiate(enemyPrefabs[0], new Vector3(100, 0, 0), transform.rotation, enemiesParent);
         }
+    }
+
+    public void UpdateMoney(int m, bool add) //Add/remove money; add true = add, add false = remove
+    {
+        if (add)
+            money += m;
+        if (!add)
+            money -= m;
+        mUI.moneyTxt.text = "Money: $" + money;
     }
 }

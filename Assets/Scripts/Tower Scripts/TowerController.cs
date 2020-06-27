@@ -50,7 +50,7 @@ public class TowerController : MonoBehaviour
 
     void SellTower(float priceMultiplier)
     {
-        gc.money += (int) (price * priceMultiplier); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
+        gc.UpdateMoney((int)(price * priceMultiplier), true); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
         gc.selectedTower = null;
 
         foreach (GameObject tower in towersInSynergyDistance) //Remove this tower from others' synergy lists
