@@ -15,6 +15,13 @@ public class MainUIController : MonoBehaviour
 
     public GameObject towerBeingPlaced;
 
+    [Header("Upgrade Menu")]
+    public GameObject upgradeMenu;
+    public TMP_Text towerNameTxt;
+    public TMP_Text rangeTxt;
+    public TMP_Text damageTxt;
+    public TMP_Text rateOfFireTxt;
+
     public void PlaceTower(int id) //Places a tower based on it's id
     {
         int price = towerPrefabs[id].GetComponent<TowerController>().price;
@@ -42,6 +49,7 @@ public class MainUIController : MonoBehaviour
             {
                 gc.isPlacingTower = false;
                 buyMenu.SetActive(true);
+                EnableUpgradeMenu(towerBeingPlaced.GetComponent<TowerController>());
                 towerBeingPlaced.GetComponent<TowerController>().isActive = true;
             }
 
@@ -54,5 +62,17 @@ public class MainUIController : MonoBehaviour
                 Destroy(towerBeingPlaced);
             }
         }
+    }
+
+    public void EnableUpgradeMenu(TowerController tc)
+    {
+        upgradeMenu.SetActive(true);
+        towerNameTxt.text = tc.name;
+        rangeTxt.text = "Range: " + tc.range;
+    }
+
+    public void DisableUpgradeMenu()
+    {
+        upgradeMenu.SetActive(false);
     }
 }

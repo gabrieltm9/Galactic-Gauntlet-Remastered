@@ -48,9 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec39946a43a4e5447b5fed5147dc4933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gc: {fileID: 0}
+  name: Machine Gun
   type: 0
   price: 100
+  gc: {fileID: 0}
   modelRotateChild: {fileID: 6004024855666914527}
   rangeImg: {fileID: 6004024856718668662}
   isActive: 0

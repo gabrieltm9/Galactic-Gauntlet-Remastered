@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public int id;
+    public string name;
     public int health = 50;
     public int moneyDrop = 50; //How much money to drop when killed
     public int damage = 1; //How much health to remove from the player

@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class TowerController : MonoBehaviour
 {
-    public GameController gc;
+    public string name;
     public int type; //Type of tower; 0 = machine gun
     public int price;
+    public float range;
+
+    public GameController gc;
 
     public GameObject modelRotateChild; //The gameobject to rotate to face enemies
     public Image rangeImg; //The tower's range UI child
@@ -31,6 +34,7 @@ public class TowerController : MonoBehaviour
     private void Awake()
     {
         gc = GameObject.FindObjectOfType<GameController>();
+        range = rangeImg.GetComponent<SphereCollider>().radius;
     }
 
     public void Update()
@@ -40,6 +44,9 @@ public class TowerController : MonoBehaviour
             enemiesInRange.Remove(target);
             UpdateTarget();
         }
+
+        if (enemiesInRange.Count > 0 && enemiesInRange[0] == null)
+            UpdateTarget();
 
         if(Input.GetKeyDown(KeyCode.Escape) && uiEnabled && isActive)
             ToggleUI();
@@ -51,7 +58,7 @@ public class TowerController : MonoBehaviour
     void SellTower(float priceMultiplier)
     {
         gc.UpdateMoney((int)(price * priceMultiplier), true); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
-        gc.selectedTower = null;
+        gc.DeselectTower(this);
 
         foreach (GameObject tower in towersInSynergyDistance) //Remove this tower from others' synergy lists
             tower.GetComponent<TowerController>().UpdateSynergyList(gameObject, false);
@@ -96,7 +103,7 @@ public class TowerController : MonoBehaviour
 
     void DisableUI()
     {
-        gc.selectedTower = null;
+        gc.DeselectTower(this);
         rangeImg.enabled = false;
     }
 
@@ -129,7 +136,7 @@ public class TowerController : MonoBehaviour
             if (enemiesInRange.Count > 0)
             {
                 //Target latest enemy
-                while (enemiesInRange[0] == null || enemiesInRange[0].GetComponent<EnemyController>().isDying)
+                while (enemiesInRange[0] == null)
                     enemiesInRange.RemoveAt(0);
                 if (enemiesInRange.Count > 0) //If there is an enemy to target
                     target = enemiesInRange[0];

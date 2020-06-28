@@ -10,17 +10,24 @@ public class RangeController : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
-            tc.enemiesInRange.Add(other.gameObject);
-            tc.UpdateTarget();
+            if(!tc.enemiesInRange.Contains(other.gameObject))
+            {
+                tc.enemiesInRange.Add(other.gameObject);
+                tc.UpdateTarget();
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+
         if (other.tag == "Enemy")
         {
-            tc.enemiesInRange.Remove(other.gameObject);
-            tc.UpdateTarget();
+            if (!tc.enemiesInRange.Contains(other.gameObject))
+            {
+                tc.enemiesInRange.Remove(other.gameObject);
+                tc.UpdateTarget();
+            }
         }
     }
 }

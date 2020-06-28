@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<Wave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <waveNumber>0</waveNumber>
+  <Enemies>
+    <Enemy>
+      <id>0</id>
+      <name>Test Enemy Gray</name>
+      <count>0</count>
+      <order>1</order>
+    </Enemy>
+    <Enemy>
+      <id>1</id>
+      <name>Test Enemy Red</name>
+      <count>0</count>
+      <order>2</order>
+    </Enemy>
+  </Enemies>
+</Wave>

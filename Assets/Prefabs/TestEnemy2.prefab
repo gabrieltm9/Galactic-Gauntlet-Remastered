@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4483309961734485792}
   - component: {fileID: 6082305597937302753}
   m_Layer: 0
-  m_Name: TestEnemy
+  m_Name: TestEnemy2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: dac8d9378a8ed124ba4d483b365b8897, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -139,9 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad18aa70a41635f4e833195aa3d58169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  name: Test Enemy Gray
-  health: 40
-  moneyDrop: 20
+  id: 1
+  name: Test Enemy Red
+  health: 80
+  moneyDrop: 40
   damage: 1
   isDying: 0
