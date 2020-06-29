@@ -55,6 +55,9 @@ MonoBehaviour:
   range: 0
   damage: 0
   fireRate: 0
+  bulletType: 0
+  aoeRadius: 0
+  bulletSpeed: 0
   level: 1
   gc: {fileID: 0}
   modelRotateChild: {fileID: 6004024855666914527}

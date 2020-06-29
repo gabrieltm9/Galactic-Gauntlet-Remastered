@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4483309961734485794}
-  - component: {fileID: 4483309961734485797}
-  - component: {fileID: 4483309961734485796}
-  - component: {fileID: 4483309961734485799}
-  - component: {fileID: 4483309961734485795}
-  - component: {fileID: 4483309961734485792}
+  - component: {fileID: 4822147325422670863}
+  - component: {fileID: 4822147325422670862}
+  - component: {fileID: 4822147325422670861}
+  - component: {fileID: 4822147325422670857}
   - component: {fileID: 6082305597937302753}
+  - component: {fileID: 4483309961734485792}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -30,13 +30,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4483309961734485798}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.353552, y: -0.893, z: -0.846444}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0.454, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4483309961734485797
+--- !u!33 &4822147325422670863
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4483309961734485798}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4483309961734485796
+--- !u!23 &4822147325422670862
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,7 +83,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &4483309961734485799
+--- !u!65 &4822147325422670861
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &4483309961734485795
+--- !u!54 &4822147325422670857
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +111,26 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
+--- !u!114 &6082305597937302753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4483309961734485798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad18aa70a41635f4e833195aa3d58169, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pf: {fileID: 0}
+  id: 0
+  name: Test Enemy Gray
+  health: 40
+  moneyDrop: 20
+  damage: 1
+  isDying: 0
 --- !u!114 &4483309961734485792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,22 +145,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
-  speed: 1.2
---- !u!114 &6082305597937302753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4483309961734485798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad18aa70a41635f4e833195aa3d58169, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  name: Test Enemy Gray
-  health: 40
-  moneyDrop: 20
-  damage: 1
-  isDying: 0
+  speed: 1

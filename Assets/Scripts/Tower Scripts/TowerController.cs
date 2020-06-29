@@ -14,12 +14,17 @@ public class TowerController : MonoBehaviour
     public float range;
     public int damage;
     public int fireRate; //How long between each shot; converted to 0-1 float in Shoot()
+    public int bulletType; //0 = normal, 1 = explosive
+    public float aoeRadius; //How large of an aoe effect this tower can have (if its bullets have an aoe effect, if not this does nothing)
+    public int bulletSpeed; //How fast the bullets move
     public int level = 1;
 
     public GameController gc;
 
     public GameObject modelRotateChild; //The gameobject to rotate to face enemies
     public Image rangeImg; //The tower's range UI child
+
+    public Animation modelAnim; //The animator component attached to this tower's model
 
     public bool isActive = false; //If false, tower wont shoot, rotate, etc
 
@@ -36,11 +41,17 @@ public class TowerController : MonoBehaviour
     public List<GameObject> objectsInSpace; //While being placed, any towers/objects intersecting with this tower will be added to this list; If this list is empty, tower can be placed
     public List<GameObject> towersInSynergyDistance; //Towers within the distance needed to synergise with this tower
 
-    private void Awake()
+    private void Start()
+    {
+        SetupTower();
+    }
+
+    public void SetupTower()
     {
         gc = GameObject.FindObjectOfType<GameController>();
         td = XMLOp.DeserializeXMLTextAsset<TowerData>(towerDataAsset); //Deserialize tower data xml
         UpdateData();
+        GenerateBulletPrefab();
     }
 
     public void Update()
@@ -63,12 +74,20 @@ public class TowerController : MonoBehaviour
 
     void UpdateData()
     {
+        type = td.type;
         price = td.price;
         range = td.range;
         damage = td.damage;
         fireRate = td.fireRate;
+        rotateStrength = td.rotateSpeed;
+        aoeRadius = td.aoeRadius;
+        bulletType = td.bulletType;
+        bulletSpeed = td.bulletSpeed;
 
         rangeImg.transform.localScale = new Vector3(range, range, range);
+
+        bulletPrefab = gc.bulletPrefabs[bulletType];
+        gc.UpdateTowerPrice(type, price);
     }
 
     public void UpdateData(UpgradeLevel ul)
@@ -76,10 +95,19 @@ public class TowerController : MonoBehaviour
         range += ul.changeToRange;
         damage += ul.changeToDamage;
         fireRate += ul.changeToFireRate;
+        aoeRadius += ul.changeToAoERadius;
+        bulletSpeed += ul.changeToBulletSpeed;
 
         rangeImg.transform.localScale = new Vector3(range, range, range);
     }
 
+    public void GenerateBulletPrefab()
+    {
+        GameObject newBullet = Instantiate(bulletPrefab, transform);
+        newBullet.GetComponent<BulletController>().SetupBullet(bulletType, damage, aoeRadius, bulletSpeed);
+        bulletPrefab = newBullet;
+        newBullet.SetActive(false);
+    } 
     void SellTower(float priceMultiplier)
     {
         gc.UpdateMoney((int)(price * priceMultiplier), true); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
@@ -148,8 +176,24 @@ public class TowerController : MonoBehaviour
 
     void Shoot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, modelRotateChild.transform.position, modelRotateChild.transform.rotation, transform);
-        bullet.GetComponent<BulletController>().SetupBullet(damage);
+        if(bulletSpeed == 999) //Hitscan, aka instant travel
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position, transform.TransformDirection(modelRotateChild.transform.forward), out hit))
+            {
+                if (enemiesInRange.Contains(hit.transform.gameObject))
+                    hit.transform.GetComponent<EnemyController>().TakeDamage(damage);
+            }
+        }
+        else //Normal shooting
+        {
+            GameObject bullet = Instantiate(bulletPrefab, modelRotateChild.transform.position, modelRotateChild.transform.rotation, transform);
+            bullet.SetActive(true);
+            bullet.GetComponent<BulletController>().RunBullet();
+        }
+
+        if (modelAnim != null)
+            modelAnim.Play("Shoot");
     }
 
     public void UpdateTarget() //Called whenever the tower's available targets changes
@@ -159,7 +203,7 @@ public class TowerController : MonoBehaviour
             if (enemiesInRange.Count > 0)
             {
                 //Target latest enemy
-                while (enemiesInRange[0] == null)
+                while (enemiesInRange.Count > 0 && enemiesInRange[0] == null)
                     enemiesInRange.RemoveAt(0);
                 if (enemiesInRange.Count > 0) //If there is an enemy to target
                 {

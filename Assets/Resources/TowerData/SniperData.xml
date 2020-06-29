@@ -1,40 +1,40 @@
 <?xml version="1.0"?>
 <TowerData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <type>0</type>
-  <name>Tower Name</name>
-  <price>100</price>
-  <range>2</range>
-  <damage>10</damage>
-  <rotateSpeed>20</rotateSpeed>
-  <fireRate>50</fireRate>
+  <type>2</type>
+  <name>Sniper</name>
+  <price>200</price>
+  <range>7</range>
+  <damage>40</damage>
+  <rotateSpeed>30</rotateSpeed>
+  <fireRate>15</fireRate>
   <bulletType>0</bulletType>
-  <aoeRadius>1</aoeRadius>
-  <bulletSpeed>20</bulletSpeed>
+  <aoeRadius>0</aoeRadius>
+  <bulletSpeed>999</bulletSpeed>
   <UpgradeLevels>
     <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
+      <cost>50</cost>
+      <description>Increases fire rate</description>
       <changeToRange>0</changeToRange>
       <changeToDamage>0</changeToDamage>
+      <changeToFireRate>10</changeToFireRate>
+      <changeToAoERadius>0</changeToAoERadius>
+      <changeToBulletSpeed>0</changeToBulletSpeed>
+      <custom>false</custom>
+    </UpgradeLevel>
+    <UpgradeLevel>
+      <cost>100</cost>
+      <description>Increases damage</description>
+      <changeToRange>0</changeToRange>
+      <changeToDamage>20</changeToDamage>
       <changeToFireRate>0</changeToFireRate>
       <changeToAoERadius>0</changeToAoERadius>
       <changeToBulletSpeed>0</changeToBulletSpeed>
       <custom>false</custom>
     </UpgradeLevel>
     <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
-      <changeToRange>0</changeToRange>
-      <changeToDamage>0</changeToDamage>
-      <changeToFireRate>0</changeToFireRate>
-      <changeToAoERadius>0</changeToAoERadius>
-      <changeToBulletSpeed>0</changeToBulletSpeed>
-      <custom>false</custom>
-    </UpgradeLevel>
-    <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
-      <changeToRange>0</changeToRange>
+      <cost>150</cost>
+      <description>Increases range</description>
+      <changeToRange>3</changeToRange>
       <changeToDamage>0</changeToDamage>
       <changeToFireRate>0</changeToFireRate>
       <changeToAoERadius>0</changeToAoERadius>

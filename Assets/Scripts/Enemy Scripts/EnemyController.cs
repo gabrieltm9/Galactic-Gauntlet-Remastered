@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour
 {
+    public PathCreation.Examples.PathFollower pf;
+
     public int id;
     public string name;
     public int health = 50;
@@ -13,9 +16,10 @@ public class EnemyController : MonoBehaviour
 
     public bool isDying;
 
-    private void Awake()
+    void Start()
     {
-        GetComponent<PathCreation.Examples.PathFollower>().pathCreator = GameObject.FindObjectOfType<PathCreation.PathCreator>();
+        pf = GetComponent<PathCreation.Examples.PathFollower>();
+        pf.pathCreator = GameObject.FindObjectOfType<PathCreation.PathCreator>();
     }
 
     void LateUpdate()
@@ -35,10 +39,17 @@ public class EnemyController : MonoBehaviour
     {
         GameObject.FindObjectOfType<GameController>().UpdateMoney(moneyDrop, true);
         isDying = true;
+        DisableEnemyFunctions();
     }
 
     void Die()
     {
         Destroy(gameObject);
+    }
+
+    void DisableEnemyFunctions() //Disables the enemy model, movement, etc
+    {
+        pf.enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
     }
 }

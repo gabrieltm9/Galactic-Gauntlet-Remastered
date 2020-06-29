@@ -7,7 +7,11 @@ public class TowerData
     public int price = 100;
     public float range = 2;
     public int damage = 10;
-    public int fireRate = 50; //How long between each shot
+    public float rotateSpeed = 20; //How fast the tower rotates to face targets
+    public int fireRate = 50; //How long between each shot; Higher = faster
+    public int bulletType; //0 = normal, 1 = explosive
+    public float aoeRadius = 1;
+    public int bulletSpeed = 20;
 
     //Upgrade Levels
     [XmlArray("UpgradeLevels"), XmlArrayItem("UpgradeLevel")]
@@ -23,5 +27,7 @@ public class UpgradeLevel
     public float changeToRange = 0;
     public int changeToDamage = 0;
     public int changeToFireRate = 0;
-    public bool custom = false; //If true, the game will try to use custom hardcoded data for this level
+    public float changeToAoERadius = 0;
+    public int changeToBulletSpeed = 0;
+    public bool custom = false; //If true, the game will try to use custom hardcoded data for this upgrade level
 }

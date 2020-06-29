@@ -17,4 +17,22 @@ public class AoERadius : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            switch (transform.parent.GetComponent<BulletController>().type)
+            {
+                case 1: //Explosive
+                    transform.parent.GetComponent<BulletController>().aoeTargets.Remove(other.gameObject);
+                    break;
+            }
+        }
+    }
+
+    public void SetRadius(float radius)
+    {
+        GetComponent<SphereCollider>().radius = radius;
+    }
 }

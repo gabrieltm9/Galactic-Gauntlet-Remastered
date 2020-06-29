@@ -9,6 +9,7 @@ public class MainUIController : MonoBehaviour
 
     public GameObject buyMenu;
     public TMP_Text moneyTxt;
+    public List<TMP_Text> towerPrices;
 
     public GameObject towerBeingPlaced;
 

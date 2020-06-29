@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     public Transform towersParent;
     public List<GameObject> enemyPrefabs;
     public Transform enemiesParent;
+    public List<GameObject> bulletPrefabs; //0 = normal, 1 = explosive
     public Transform generatedPrefabsParent;
 
     public bool isPlacingTower;
@@ -27,14 +28,11 @@ public class GameController : MonoBehaviour
     //Wave vars
     public List<Enemy> enemiesToSpawn = new List<Enemy>();
 
-    private void Awake()
-    {
-        GeneratePrefabs();
-        //GenerateSampleXMLs();
-    }
-
     private void Start()
     {
+        GeneratePrefabs();
+        GenerateSampleXMLs();
+
         LoadWave("test");
         StartCoroutine(RunWave());
     }
@@ -42,13 +40,19 @@ public class GameController : MonoBehaviour
     void GeneratePrefabs() //Spawns all tower and enemy prefabs so Awake methods in their scripts can set variables, then replaces their existing prefabs with these spawned versions
     {
         //Generate Towers
-        for(int i = 0; i < towerPrefabs.Count; i++)
+        List<GameObject> tempTowers = new List<GameObject>();
+        for (int i = 0; i < towerPrefabs.Count; i++)
         {
             GameObject newTower = Instantiate(towerPrefabs[i], new Vector3(0, 0, -15), transform.rotation, generatedPrefabsParent);
-            towerPrefabs.Remove(towerPrefabs[i]);
-            towerPrefabs.Add(newTower);
+            newTower.GetComponent<TowerController>().SetupTower();
+            tempTowers.Add(newTower);
         }
-        generatedPrefabsParent.gameObject.SetActive(false);
+        towerPrefabs = tempTowers;
+    }
+
+    public void UpdateTowerPrice(int id, int price)
+    {
+        mUI.towerPrices[id].text = "$" + price;
     }
 
     public void SelectTower(TowerController tc)
@@ -69,7 +73,7 @@ public class GameController : MonoBehaviour
     {
         TowerController tc = selectedTower;
         TowerData td = tc.td;
-        if(money >= td.upgradeLevels[tc.level - 1].cost && td.upgradeLevels.Length >= tc.level) //If player can afford upgrade
+        if(td.upgradeLevels.Length >= tc.level && money >= td.upgradeLevels[tc.level - 1].cost) //If player can afford upgrade
         {
             tc.UpdateData(td.upgradeLevels[tc.level - 1]);
             tc.level++;
