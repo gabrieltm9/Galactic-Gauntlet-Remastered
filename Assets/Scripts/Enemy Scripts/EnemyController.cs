@@ -41,13 +41,4 @@ public class EnemyController : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Bullet")
-        {
-            TakeDamage(other.GetComponent<BulletController>().damage);
-            Destroy(other.gameObject);
-        }
-    }
 }
