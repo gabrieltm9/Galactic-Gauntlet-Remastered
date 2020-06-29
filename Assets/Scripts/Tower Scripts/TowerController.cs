@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class TowerController : MonoBehaviour
 {
+    public TowerData td; //An xml file containing name, type, price, upgrade data, etc, for this tower
+    public TextAsset towerDataAsset; //The actual xml file for the TowerData above
     public string name;
     public int type; //Type of tower; 0 = machine gun
     public int price;
     public float range;
+    public int damage;
+    public float shootDelay; //How long between each shot
 
     public GameController gc;
 
@@ -24,7 +28,6 @@ public class TowerController : MonoBehaviour
 
     public bool uiEnabled;
 
-    public float shootDelay; //How long between each shot
     public GameObject bulletPrefab;
     public bool isShooting;
 
@@ -34,7 +37,7 @@ public class TowerController : MonoBehaviour
     private void Awake()
     {
         gc = GameObject.FindObjectOfType<GameController>();
-        range = rangeImg.GetComponent<SphereCollider>().radius;
+        UpdateData();
     }
 
     public void Update()
@@ -45,7 +48,7 @@ public class TowerController : MonoBehaviour
             UpdateTarget();
         }
 
-        if (enemiesInRange.Count > 0 && enemiesInRange[0] == null)
+        if ((enemiesInRange.Count > 0) && (target == null || enemiesInRange[0] == null))
             UpdateTarget();
 
         if(Input.GetKeyDown(KeyCode.Escape) && uiEnabled && isActive)
@@ -53,6 +56,18 @@ public class TowerController : MonoBehaviour
 
         if(Input.GetKeyDown(gc.sellTowerKey) && uiEnabled && isActive)
             SellTower(0.5f);
+    }
+
+    void UpdateData()
+    {
+        td = XMLOp.DeserializeXMLTextAsset<TowerData>(towerDataAsset); //Deserialize tower data xml
+
+        price = td.price;
+        range = td.range;
+        damage = td.damage;
+        shootDelay = td.shootDelay;
+
+        rangeImg.transform.localScale = new Vector3(range, range, range);
     }
 
     void SellTower(float priceMultiplier)
@@ -122,30 +137,28 @@ public class TowerController : MonoBehaviour
 
     void Shoot()
     {
-        Instantiate(bulletPrefab, modelRotateChild.transform.position, modelRotateChild.transform.rotation, transform); 
+        GameObject bullet = Instantiate(bulletPrefab, modelRotateChild.transform.position, modelRotateChild.transform.rotation, transform);
+        bullet.GetComponent<BulletController>().SetupBullet(damage);
     }
 
     public void UpdateTarget() //Called whenever the tower's available targets changes
     {
         if(isActive)
         {
-            bool shouldStartShooting = false;
-            if (target == null)
-                shouldStartShooting = true;
-
             if (enemiesInRange.Count > 0)
             {
                 //Target latest enemy
                 while (enemiesInRange[0] == null)
                     enemiesInRange.RemoveAt(0);
                 if (enemiesInRange.Count > 0) //If there is an enemy to target
+                {
                     target = enemiesInRange[0];
+                    if (!isShooting)
+                        StartCoroutine(ShootTimer());
+                }
                 else
                     target = null;
             }
-
-            if (shouldStartShooting)
-                StartCoroutine(ShootTimer());
         }
     }
 

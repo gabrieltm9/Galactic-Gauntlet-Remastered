@@ -23,12 +23,12 @@ public class XMLOp : MonoBehaviour
         return deserialized;
     }
 
-    public static Wave DeserializeXMLTextAsset(TextAsset ta)
+    public static T DeserializeXMLTextAsset<T>(TextAsset ta)
     {
-        XmlSerializer serializer = new XmlSerializer(typeof(Wave));
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
         using (StringReader reader = new StringReader(ta.ToString()))
         {
-            return serializer.Deserialize(reader) as Wave;
+            return (T) serializer.Deserialize(reader);
         }
     }
 }

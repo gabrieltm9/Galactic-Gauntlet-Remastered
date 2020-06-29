@@ -23,9 +23,11 @@ public class RangeController : MonoBehaviour
 
         if (other.tag == "Enemy")
         {
-            if (!tc.enemiesInRange.Contains(other.gameObject))
+            if (tc.enemiesInRange.Contains(other.gameObject))
             {
                 tc.enemiesInRange.Remove(other.gameObject);
+                if (tc.target == other.gameObject)
+                    tc.target = null;
                 tc.UpdateTarget();
             }
         }

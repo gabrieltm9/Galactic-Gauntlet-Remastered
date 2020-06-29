@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public int bulletDmg = 5;
-    public float bulletSpeed = 3f; //How fast the bullet moves
-    
-    // Start is called before the first frame update
-    void Start()
+    public int damage = 5; //How much damage it does on impact
+    public int speed = 20; //How fast the bullet moves
+
+    public void SetupBullet(int dmg)
     {
-        GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed;
+        damage = dmg;
+        GetComponent<Rigidbody>().velocity = transform.forward * speed;
+    }
+
+    public void SetupBullet(int dmg, int speed)
+    {
+        damage = dmg;
+        this.speed = speed;
+        GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
 }

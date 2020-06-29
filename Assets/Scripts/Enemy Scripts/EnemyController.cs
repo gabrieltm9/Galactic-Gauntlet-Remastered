@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour
     {
         if(other.tag == "Bullet")
         {
-            TakeDamage(other.GetComponent<BulletController>().bulletDmg);
+            TakeDamage(other.GetComponent<BulletController>().damage);
             Destroy(other.gameObject);
         }
     }

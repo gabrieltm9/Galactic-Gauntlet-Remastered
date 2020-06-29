@@ -15,19 +15,40 @@ public class GameController : MonoBehaviour
 
     public bool spawnEnemies;
     public float enemySpawnDelay; //How long to wait between enemy spawns
+
+    public List<GameObject> towerPrefabs; //0 = machine gun
+    public Transform towersParent;
     public List<GameObject> enemyPrefabs;
     public Transform enemiesParent;
+    public Transform generatedPrefabsParent;
 
     public bool isPlacingTower;
 
     //Wave vars
     public List<Enemy> enemiesToSpawn = new List<Enemy>();
 
+    private void Awake()
+    {
+        GeneratePrefabs();
+        GenerateSampleXMLs();
+    }
+
     private void Start()
     {
-        GenerateSampleWave(Application.dataPath + "\\SampleWave.xml");
         LoadWave("test");
         StartCoroutine(RunWave());
+    }
+
+    void GeneratePrefabs() //Spawns all tower and enemy prefabs so Awake methods in their scripts can set variables, then replaces their existing prefabs with these spawned versions
+    {
+        //Generate Towers
+        for(int i = 0; i < towerPrefabs.Count; i++)
+        {
+            GameObject newTower = Instantiate(towerPrefabs[i], new Vector3(0, 0, -15), transform.rotation, generatedPrefabsParent);
+            towerPrefabs.Remove(towerPrefabs[i]);
+            towerPrefabs.Add(newTower);
+        }
+        generatedPrefabsParent.gameObject.SetActive(false);
     }
 
     public void SelectTower(TowerController tc)
@@ -86,13 +107,19 @@ public class GameController : MonoBehaviour
     void LoadWave(string xml)
     {
         TextAsset xmlAsset = Resources.Load<TextAsset>("Waves/" + xml);
-        Wave w = XMLOp.DeserializeXMLTextAsset(xmlAsset);
+        Wave w = XMLOp.DeserializeXMLTextAsset<Wave>(xmlAsset);
 
         // \/ Line below will load xml from path instead
         //Wave w = XMLOp.Deserialize<Wave>("D:\\Game Stuff\\Game Making\\GGRemastered\\Galactic-Gauntlet-Remastered\\Assets\\Resources\\Waves\\test.xml");
 
         foreach (Enemy e in w.Enemies)
             enemiesToSpawn.Add(e);
+    }
+
+    void GenerateSampleXMLs()
+    {
+        GenerateSampleWave(Application.dataPath + "\\SampleXMLs\\Wave.xml");
+        GenerateSampleTowerData(Application.dataPath + "\\SampleXMLs\\TowerData.xml");
     }
 
     void GenerateSampleWave(string outPath) //Makes a basic wave xml file which can be edited to make new waves
@@ -108,5 +135,14 @@ public class GameController : MonoBehaviour
             index++;
         }
         XMLOp.Serialize(w, outPath);
+    }
+
+    void GenerateSampleTowerData(string outPath)
+    {
+        TowerData td = new TowerData();
+        td.upgradeLevels = new UpgradeLevel[3];
+        for(int i = 0; i < 3; i++)
+            td.upgradeLevels[i] = new UpgradeLevel();
+        XMLOp.Serialize(td, outPath);
     }
 }

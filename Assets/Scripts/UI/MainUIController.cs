@@ -10,9 +10,6 @@ public class MainUIController : MonoBehaviour
     public GameObject buyMenu;
     public TMP_Text moneyTxt;
 
-    public List<GameObject> towerPrefabs; //0 = machine gun
-    public Transform towersParent;
-
     public GameObject towerBeingPlaced;
 
     [Header("Upgrade Menu")]
@@ -20,17 +17,17 @@ public class MainUIController : MonoBehaviour
     public TMP_Text towerNameTxt;
     public TMP_Text rangeTxt;
     public TMP_Text damageTxt;
-    public TMP_Text rateOfFireTxt;
+    public TMP_Text fireRateTxt;
 
     public void PlaceTower(int id) //Places a tower based on it's id
     {
-        int price = towerPrefabs[id].GetComponent<TowerController>().price;
+        int price = gc.towerPrefabs[id].GetComponent<TowerController>().price;
         if(gc.money >= price && !gc.isPlacingTower)
         {
             gc.isPlacingTower = true;
             buyMenu.SetActive(false);
             gc.UpdateMoney(price, false);
-            towerBeingPlaced = Instantiate(towerPrefabs[id], transform.position, transform.rotation, towersParent);
+            towerBeingPlaced = Instantiate(gc.towerPrefabs[id], transform.position, transform.rotation, gc.towersParent);
             if (gc.selectedTower != null)
                 gc.selectedTower.ToggleUI();
             gc.selectedTower = towerBeingPlaced.GetComponent<TowerController>();
@@ -69,6 +66,8 @@ public class MainUIController : MonoBehaviour
         upgradeMenu.SetActive(true);
         towerNameTxt.text = tc.name;
         rangeTxt.text = "Range: " + tc.range;
+        damageTxt.text = "Damage: " + tc.damage;
+        fireRateTxt.text = "Fire Rate: " + (100 - (tc.shootDelay * 100)); //In shoot delay, lower number = faster. This makes bigger number = faster
     }
 
     public void DisableUpgradeMenu()
