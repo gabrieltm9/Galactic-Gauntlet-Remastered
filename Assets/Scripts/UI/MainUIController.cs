@@ -18,6 +18,8 @@ public class MainUIController : MonoBehaviour
     public TMP_Text rangeTxt;
     public TMP_Text damageTxt;
     public TMP_Text fireRateTxt;
+    public TMP_Text levelTxt;
+    public TMP_Text upgradeDescriptionTxt;
 
     public void PlaceTower(int id) //Places a tower based on it's id
     {
@@ -39,7 +41,6 @@ public class MainUIController : MonoBehaviour
         if(gc.isPlacingTower)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 8.33f));
-            Debug.Log(mousePos);
             towerBeingPlaced.transform.position = new Vector3(mousePos.x, 0f, mousePos.z);
 
             if(Input.GetMouseButtonDown(0) && towerBeingPlaced.GetComponent<TowerController>().objectsInSpace.Count == 0) //If left click to place tower & no obstructions in that place
@@ -64,14 +65,22 @@ public class MainUIController : MonoBehaviour
     public void EnableUpgradeMenu(TowerController tc)
     {
         upgradeMenu.SetActive(true);
-        towerNameTxt.text = tc.name;
-        rangeTxt.text = "Range: " + tc.range;
-        damageTxt.text = "Damage: " + tc.damage;
-        fireRateTxt.text = "Fire Rate: " + (100 - (tc.shootDelay * 100)); //In shoot delay, lower number = faster. This makes bigger number = faster
+        UpdateUpgradeUI(tc);
     }
 
     public void DisableUpgradeMenu()
     {
         upgradeMenu.SetActive(false);
+    }
+
+    public void UpdateUpgradeUI(TowerController tc)
+    {
+        towerNameTxt.text = tc.name;
+        rangeTxt.text = "Range: " + tc.range;
+        damageTxt.text = "Damage: " + tc.damage;
+        fireRateTxt.text = "Fire Rate: " + tc.fireRate; //In shoot delay, lower number = faster. This makes bigger number = faster
+        levelTxt.text = "Level: " + tc.level;
+        if(tc.level <= tc.td.upgradeLevels.Length)
+            upgradeDescriptionTxt.text = tc.td.upgradeLevels[tc.level - 1].description;
     }
 }

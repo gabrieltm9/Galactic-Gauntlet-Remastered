@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         GeneratePrefabs();
-        GenerateSampleXMLs();
+        //GenerateSampleXMLs();
     }
 
     private void Start()
@@ -63,6 +63,18 @@ public class GameController : MonoBehaviour
     {
         selectedTower = null;
         mUI.DisableUpgradeMenu();
+    }
+
+    public void UpgradeTower()
+    {
+        TowerController tc = selectedTower;
+        TowerData td = tc.td;
+        if(money >= td.upgradeLevels[tc.level - 1].cost && td.upgradeLevels.Length >= tc.level) //If player can afford upgrade
+        {
+            tc.UpdateData(td.upgradeLevels[tc.level - 1]);
+            tc.level++;
+            mUI.UpdateUpgradeUI(tc);
+        }
     }
 
     IEnumerator InfiniteWave()

@@ -5,28 +5,28 @@
   <price>100</price>
   <range>2</range>
   <damage>10</damage>
-  <shootDelay>0.5</shootDelay>
+  <fireRate>50</fireRate>
   <UpgradeLevels>
     <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
+      <cost>50</cost>
+      <description>Increases fire rate</description>
       <changeToRange>0</changeToRange>
       <changeToDamage>0</changeToDamage>
+      <changeToFireRate>30</changeToFireRate>
+      <custom>false</custom>
+    </UpgradeLevel>
+    <UpgradeLevel>
+      <cost>100</cost>
+      <description>Increases damage</description>
+      <changeToRange>0</changeToRange>
+      <changeToDamage>5</changeToDamage>
       <changeToFireRate>0</changeToFireRate>
       <custom>false</custom>
     </UpgradeLevel>
     <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
-      <changeToRange>0</changeToRange>
-      <changeToDamage>0</changeToDamage>
-      <changeToFireRate>0</changeToFireRate>
-      <custom>false</custom>
-    </UpgradeLevel>
-    <UpgradeLevel>
-      <cost>0</cost>
-      <description>Upgrade Description</description>
-      <changeToRange>0</changeToRange>
+      <cost>150</cost>
+      <description>Increases range</description>
+      <changeToRange>2</changeToRange>
       <changeToDamage>0</changeToDamage>
       <changeToFireRate>0</changeToFireRate>
       <custom>false</custom>

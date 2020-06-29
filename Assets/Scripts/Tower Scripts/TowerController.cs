@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,8 @@ public class TowerController : MonoBehaviour
     public int price;
     public float range;
     public int damage;
-    public float shootDelay; //How long between each shot
+    public int fireRate; //How long between each shot; converted to 0-1 float in Shoot()
+    public int level = 1;
 
     public GameController gc;
 
@@ -37,6 +39,7 @@ public class TowerController : MonoBehaviour
     private void Awake()
     {
         gc = GameObject.FindObjectOfType<GameController>();
+        td = XMLOp.DeserializeXMLTextAsset<TowerData>(towerDataAsset); //Deserialize tower data xml
         UpdateData();
     }
 
@@ -60,12 +63,19 @@ public class TowerController : MonoBehaviour
 
     void UpdateData()
     {
-        td = XMLOp.DeserializeXMLTextAsset<TowerData>(towerDataAsset); //Deserialize tower data xml
-
         price = td.price;
         range = td.range;
         damage = td.damage;
-        shootDelay = td.shootDelay;
+        fireRate = td.fireRate;
+
+        rangeImg.transform.localScale = new Vector3(range, range, range);
+    }
+
+    public void UpdateData(UpgradeLevel ul)
+    {
+        range += ul.changeToRange;
+        damage += ul.changeToDamage;
+        fireRate += ul.changeToFireRate;
 
         rangeImg.transform.localScale = new Vector3(range, range, range);
     }
@@ -127,6 +137,7 @@ public class TowerController : MonoBehaviour
         isShooting = true;
         while (target != null)
         {
+            float shootDelay = (100f - (float)fireRate) / 100f;
             yield return new WaitForSeconds(shootDelay);
             if (target == null)
                 break;
