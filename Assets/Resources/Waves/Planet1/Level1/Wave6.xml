@@ -3,14 +3,19 @@
   <waveNumber>0</waveNumber>
   <Enemies>
     <Enemy>
+      <id>1</id>
+      <name>Test Enemy Red</name>
+      <count>10</count>
+    </Enemy>
+    <Enemy>
       <id>0</id>
       <name>Test Enemy Gray</name>
-      <count>0</count>
+      <count>40</count>
     </Enemy>
     <Enemy>
       <id>1</id>
       <name>Test Enemy Red</name>
-      <count>0</count>
+      <count>10</count>
     </Enemy>
   </Enemies>
 </Wave>

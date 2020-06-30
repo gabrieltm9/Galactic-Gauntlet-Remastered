@@ -5,12 +5,12 @@
     <Enemy>
       <id>0</id>
       <name>Test Enemy Gray</name>
-      <count>0</count>
+      <count>4</count>
     </Enemy>
     <Enemy>
       <id>1</id>
       <name>Test Enemy Red</name>
-      <count>0</count>
+      <count>6</count>
     </Enemy>
   </Enemies>
 </Wave>

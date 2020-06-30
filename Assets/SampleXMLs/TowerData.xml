@@ -7,9 +7,15 @@
   <damage>10</damage>
   <rotateSpeed>20</rotateSpeed>
   <fireRate>50</fireRate>
-  <bulletType>0</bulletType>
-  <aoeRadius>1</aoeRadius>
-  <bulletSpeed>20</bulletSpeed>
+  <bulletData>
+    <name>Bullet</name>
+    <model>0</model>
+    <aoeRadius>0</aoeRadius>
+    <bulletSpeed>20</bulletSpeed>
+    <explosive>false</explosive>
+    <lastingDamagePerSecond>0</lastingDamagePerSecond>
+    <overrideImpactParticles>-1</overrideImpactParticles>
+  </bulletData>
   <UpgradeLevels>
     <UpgradeLevel>
       <cost>0</cost>

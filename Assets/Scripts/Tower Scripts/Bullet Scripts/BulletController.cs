@@ -6,26 +6,50 @@ public class BulletController : MonoBehaviour
 {
     public GameObject aoeChild; //The child gameobject that handles the projectile's aoe range
 
-    public int type; //0 = normal bullet; 1 = grenade / explodes on impact
-    public int damage = 5; //How much damage it does on impact
-    public int speed = 20; //How fast the bullet moves
+    public int damage = 0; //How much damage it does on impact
+    public int speed = 0; //How fast the bullet moves
 
+    public bool explosive;
     public List<GameObject> aoeTargets;
-    public float aoeRadius = 1;
+    public float aoeRadius = 0; //The radius affected by the bullet's aoe effects. If 0, aoe effects are disabled
 
     public bool isPrimed = false;
 
-    public ParticleSystem impactParticles; //This particle system will be played on bullet impact
+    public GameObject impactParticlesParent; //The gameobject that holds particle systems that can be played on bullet impact; Chosen in SetupBullet and others are destroyed
+    public ParticleSystem impactParticleSystem = null; //This particle system will be played on bullet impact
 
-    public void SetupBullet(int type, int dmg, float aoeRadius, int speed) //Sets the bullet's stats, but doesnt prime it or set velocity
+    public GameObject modelsParent; //The gameobject that holds potential bullet models; Model is chosen in SetupBullet and others are destroyed
+    public GameObject modelChild;
+
+    public void SetupBullet(TowerData td) //Sets the bullet's stats, but doesnt prime it or set velocity
     {
-        this.type = type;
-        damage = dmg;
-        this.speed = speed;
-        this.aoeRadius = aoeRadius;
+        BulletData bd = td.bulletData;
+        damage = td.damage;
+        speed = bd.bulletSpeed;
+        explosive = bd.explosive;
+        aoeRadius = bd.aoeRadius;
 
-        if (aoeChild != null)
+        //Set model, destroy other model options
+        modelChild = modelsParent.transform.GetChild(bd.model).gameObject;
+
+        //If this bullet has an AoE effect, set the aoe radius. Otherwise, destroy aoe child
+        if (aoeRadius == 0)
+            Destroy(aoeChild);
+        else
             aoeChild.GetComponent<AoERadius>().SetRadius(aoeRadius);
+
+        //Set impact particles
+        if(bd.overrideImpactParticles < 0) //Try to detect proper impact particles
+        {
+            if (bd.explosive)
+                impactParticleSystem = impactParticlesParent.transform.GetChild(0).GetComponent<ParticleSystem>(); //Medium explosion
+            else
+                impactParticleSystem = null; //No / default impact particles
+        }
+        else if(bd.overrideImpactParticles > 0) //Override particles with options from list
+            impactParticleSystem = impactParticlesParent.transform.GetChild(bd.overrideImpactParticles - 1).GetComponent<ParticleSystem>(); //-1 to override int because 0 = no impact, so list starts at 1
+
+        DestroyUnusedChildren();
     }
 
     public void RunBullet()
@@ -34,20 +58,16 @@ public class BulletController : MonoBehaviour
         isPrimed = true;
     }
 
+    //Called from ImpactDetection
     public void OnImpact(GameObject collidedObj)
     {
         if(isPrimed)
         {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
-            switch (type)
-            {
-                case 0: //Normal
-                    NormalBulletImpact(collidedObj);
-                    break;
-                case 1: //Explosive
-                    Explode();
-                    break;
-            }
+            if (explosive)
+                Explode();
+            else
+                NormalBulletImpact(collidedObj);
         }
     }
 
@@ -71,23 +91,37 @@ public class BulletController : MonoBehaviour
 
     IEnumerator ImpactEffects()
     {
-        impactParticles.Play(); //Play impact particles
-        yield return new WaitForSeconds(impactParticles.main.duration); //Wait for impact particles
+        impactParticleSystem.Play(); //Play impact particles
+        yield return new WaitForSeconds(impactParticleSystem.main.duration); //Wait for impact particles
         Destroy(gameObject); //Destroy bullet
     }
 
     void DisableBulletFunctions()
     {
-        GetComponent<MeshRenderer>().enabled = false; //Disables bullet model
-        GetComponent<MeshCollider>().enabled = false; //Disables bullet collider
+        modelChild.SetActive(false);
         if (aoeChild != null)
             aoeChild.SetActive(false); //Disables AOE child (if this bullet has one)
         isPrimed = false; //Prevents any further damage code from running
     }
 
-    private void OnTriggerEnter(Collider other)
+    void DestroyUnusedChildren() //Will destroy unused model & particle system children
     {
-        if (other.tag == "Enemy" || other.tag == "Obstruction")
-            OnImpact(other.gameObject);
+        //Destroy ununsed bullet models
+        foreach (Transform child in modelsParent.transform)
+        {
+            if (child.gameObject != modelChild)
+                Destroy(child.gameObject);
+        }
+        if (modelChild == null)
+            Destroy(modelsParent);
+
+        //Destroy unused impact particle systems
+        foreach (Transform child in impactParticlesParent.transform)
+        {
+            if (child.GetComponent<ParticleSystem>() != impactParticleSystem)
+                Destroy(child.gameObject);
+        }
+        if (impactParticleSystem == null)
+            Destroy(impactParticlesParent);
     }
 }

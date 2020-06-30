@@ -21,6 +21,7 @@ public class MainUIController : MonoBehaviour
     public TMP_Text fireRateTxt;
     public TMP_Text levelTxt;
     public TMP_Text upgradeDescriptionTxt;
+    public TMP_Text upgradePriceTxt;
 
     public void PlaceTower(int id) //Places a tower based on it's id
     {
@@ -29,7 +30,7 @@ public class MainUIController : MonoBehaviour
         {
             gc.isPlacingTower = true;
             buyMenu.SetActive(false);
-            gc.UpdateMoney(price, false);
+            gc.UpdateMoney(-price);
             towerBeingPlaced = Instantiate(gc.towerPrefabs[id], transform.position, transform.rotation, gc.towersParent);
             if (gc.selectedTower != null)
                 gc.selectedTower.ToggleUI();
@@ -54,7 +55,7 @@ public class MainUIController : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.Escape)) //Cancel place
             {
-                gc.UpdateMoney(towerBeingPlaced.GetComponent<TowerController>().price, true);
+                gc.UpdateMoney(towerBeingPlaced.GetComponent<TowerController>().price);
                 gc.selectedTower = null;
                 gc.isPlacingTower = false;
                 buyMenu.SetActive(true);
@@ -81,7 +82,10 @@ public class MainUIController : MonoBehaviour
         damageTxt.text = "Damage: " + tc.damage;
         fireRateTxt.text = "Fire Rate: " + tc.fireRate; //In shoot delay, lower number = faster. This makes bigger number = faster
         levelTxt.text = "Level: " + tc.level;
-        if(tc.level <= tc.td.upgradeLevels.Length)
+        if (tc.level <= tc.td.upgradeLevels.Length)
+        {
             upgradeDescriptionTxt.text = tc.td.upgradeLevels[tc.level - 1].description;
+            upgradePriceTxt.text = "$" + tc.td.upgradeLevels[tc.level - 1].cost;
+        }
     }
 }

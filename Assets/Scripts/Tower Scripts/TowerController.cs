@@ -8,13 +8,12 @@ public class TowerController : MonoBehaviour
 {
     public TowerData td; //An xml file containing name, type, price, upgrade data, etc, for this tower
     public TextAsset towerDataAsset; //The actual xml file for the TowerData above
-    public string name;
+    public new string name;
     public int type; //Type of tower; 0 = machine gun
     public int price;
     public float range;
     public int damage;
     public int fireRate; //How long between each shot; converted to 0-1 float in Shoot()
-    public int bulletType; //0 = normal, 1 = explosive
     public float aoeRadius; //How large of an aoe effect this tower can have (if its bullets have an aoe effect, if not this does nothing)
     public int bulletSpeed; //How fast the bullets move
     public int level = 1;
@@ -25,6 +24,7 @@ public class TowerController : MonoBehaviour
     public Image rangeImg; //The tower's range UI child
 
     public Animation modelAnim; //The animator component attached to this tower's model
+    public ParticleSystem shootParticle; //The particle system played on Shoot()
 
     public bool isActive = false; //If false, tower wont shoot, rotate, etc
 
@@ -80,13 +80,11 @@ public class TowerController : MonoBehaviour
         damage = td.damage;
         fireRate = td.fireRate;
         rotateStrength = td.rotateSpeed;
-        aoeRadius = td.aoeRadius;
-        bulletType = td.bulletType;
-        bulletSpeed = td.bulletSpeed;
+        aoeRadius = td.bulletData.aoeRadius;
+        bulletSpeed = td.bulletData.bulletSpeed;
 
         rangeImg.transform.localScale = new Vector3(range, range, range);
 
-        bulletPrefab = gc.bulletPrefabs[bulletType];
         gc.UpdateTowerPrice(type, price);
     }
 
@@ -103,18 +101,28 @@ public class TowerController : MonoBehaviour
 
     public void GenerateBulletPrefab()
     {
-        GameObject newBullet = Instantiate(bulletPrefab, transform);
-        newBullet.GetComponent<BulletController>().SetupBullet(bulletType, damage, aoeRadius, bulletSpeed);
+        if (bulletPrefab != null)
+            Destroy(bulletPrefab);
+        GameObject newBullet = Instantiate(gc.bulletPrefab, transform);
+        newBullet.GetComponent<BulletController>().SetupBullet(td);
         bulletPrefab = newBullet;
         newBullet.SetActive(false);
     } 
     void SellTower(float priceMultiplier)
     {
-        gc.UpdateMoney((int)(price * priceMultiplier), true); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
+        gc.UpdateMoney((int)(price * priceMultiplier)); //Give back money equal to the price of this tower times a multiplier (ex. get half money back vs full refund, etc)
         gc.DeselectTower(this);
 
-        foreach (GameObject tower in towersInSynergyDistance) //Remove this tower from others' synergy lists
-            tower.GetComponent<TowerController>().UpdateSynergyList(gameObject, false);
+        if (towersInSynergyDistance.Count > 0)
+        {
+            foreach (GameObject tower in towersInSynergyDistance) //Remove this tower from others' synergy lists
+            {
+                if (tower != null)
+                    tower.GetComponent<TowerController>().UpdateSynergyList(gameObject, false);
+                else
+                    towersInSynergyDistance.Remove(tower);
+            }
+        }
 
         Destroy(gameObject);
     }
@@ -194,6 +202,8 @@ public class TowerController : MonoBehaviour
 
         if (modelAnim != null)
             modelAnim.Play("Shoot");
+        if (shootParticle != null)
+            shootParticle.Play();
     }
 
     public void UpdateTarget() //Called whenever the tower's available targets changes

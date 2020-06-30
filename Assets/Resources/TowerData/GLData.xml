@@ -4,12 +4,17 @@
   <name>Grenade Launcher</name>
   <price>150</price>
   <range>2</range>
-  <damage>20</damage>
+  <damage>15</damage>
   <rotateSpeed>15</rotateSpeed>
   <fireRate>20</fireRate>
-  <bulletType>1</bulletType>
-  <aoeRadius>1.5</aoeRadius>
-  <bulletSpeed>6</bulletSpeed>
+  <bulletData>
+    <name>Grenade</name>
+    <model>1</model>
+    <aoeRadius>1.5</aoeRadius>
+    <bulletSpeed>6</bulletSpeed>
+    <explosive>true</explosive>
+    <lastingDamagePerSecond>0</lastingDamagePerSecond>
+  </bulletData>
   <UpgradeLevels>
     <UpgradeLevel>
       <cost>50</cost>

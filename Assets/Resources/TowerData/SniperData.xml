@@ -4,12 +4,17 @@
   <name>Sniper</name>
   <price>200</price>
   <range>7</range>
-  <damage>40</damage>
+  <damage>30</damage>
   <rotateSpeed>30</rotateSpeed>
   <fireRate>15</fireRate>
-  <bulletType>0</bulletType>
-  <aoeRadius>0</aoeRadius>
-  <bulletSpeed>999</bulletSpeed>
+  <bulletData>
+    <name>Bullet</name>
+    <model>0</model>
+    <aoeRadius>0</aoeRadius>
+    <bulletSpeed>999</bulletSpeed>
+    <explosive>false</explosive>
+    <lastingDamagePerSecond>0</lastingDamagePerSecond>
+  </bulletData>
   <UpgradeLevels>
     <UpgradeLevel>
       <cost>50</cost>

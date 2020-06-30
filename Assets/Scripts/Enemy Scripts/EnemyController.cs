@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     public PathCreation.Examples.PathFollower pf;
 
     public int id;
-    public string name;
+    public new string name;
     public int health = 50;
     public int moneyDrop = 50; //How much money to drop when killed
     public int damage = 1; //How much health to remove from the player
@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour
 
     void PreDeath()
     {
-        GameObject.FindObjectOfType<GameController>().UpdateMoney(moneyDrop, true);
+        GameObject.FindObjectOfType<GameController>().UpdateMoney(moneyDrop);
         isDying = true;
         DisableEnemyFunctions();
     }

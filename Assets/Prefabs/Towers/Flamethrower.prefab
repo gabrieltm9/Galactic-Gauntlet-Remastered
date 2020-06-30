@@ -324,17 +324,20 @@ MonoBehaviour:
   range: 0
   damage: 0
   fireRate: 0
+  aoeRadius: 0
+  bulletSpeed: 0
   level: 1
   gc: {fileID: 0}
   modelRotateChild: {fileID: 8404709880109004177}
   rangeImg: {fileID: 3608114417442693909}
+  modelAnim: {fileID: 0}
+  shootParticle: {fileID: 0}
   isActive: 0
   enemiesInRange: []
   target: {fileID: 0}
   rotateStrength: 20
   uiEnabled: 1
-  bulletPrefab: {fileID: 4179600736546488068, guid: 5147f515bd43af245aa3f9411c76fa0a,
-    type: 3}
+  bulletPrefab: {fileID: 0}
   isShooting: 0
   objectsInSpace: []
   towersInSynergyDistance: []

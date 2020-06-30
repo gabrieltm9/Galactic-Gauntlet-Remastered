@@ -9,9 +9,8 @@ public class TowerData
     public int damage = 10;
     public float rotateSpeed = 20; //How fast the tower rotates to face targets
     public int fireRate = 50; //How long between each shot; Higher = faster
-    public int bulletType; //0 = normal, 1 = explosive
-    public float aoeRadius = 1;
-    public int bulletSpeed = 20;
+
+    public BulletData bulletData;
 
     //Upgrade Levels
     [XmlArray("UpgradeLevels"), XmlArrayItem("UpgradeLevel")]

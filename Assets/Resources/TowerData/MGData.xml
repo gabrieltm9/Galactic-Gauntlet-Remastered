@@ -4,19 +4,24 @@
   <name>Machine Gun</name>
   <price>100</price>
   <range>2.5</range>
-  <damage>10</damage>
+  <damage>8</damage>
   <rotateSpeed>20</rotateSpeed>
-  <fireRate>50</fireRate>
-  <bulletType>0</bulletType>
-  <aoeRadius>0</aoeRadius>
-  <bulletSpeed>15</bulletSpeed>
+  <fireRate>70</fireRate>
+  <bulletData>
+    <name>Bullet</name>
+    <model>0</model>
+    <aoeRadius>0</aoeRadius>
+    <bulletSpeed>15</bulletSpeed>
+    <explosive>false</explosive>
+    <lastingDamagePerSecond>0</lastingDamagePerSecond>
+  </bulletData>
   <UpgradeLevels>
     <UpgradeLevel>
       <cost>50</cost>
       <description>Increases fire rate</description>
       <changeToRange>0</changeToRange>
       <changeToDamage>0</changeToDamage>
-      <changeToFireRate>30</changeToFireRate>
+      <changeToFireRate>10</changeToFireRate>
       <changeToAoERadius>0</changeToAoERadius>
       <changeToBulletSpeed>0</changeToBulletSpeed>
       <custom>false</custom>

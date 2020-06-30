@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -13,14 +12,18 @@ public class GameController : MonoBehaviour
 
     public KeyCode sellTowerKey;
 
+    public Vector3 levelID; //x = planet, y = level, z = wave
+    public int maxWaves = 20; //How many waves need to be cleared to consider the level "beaten"; This int will likely be changed at runtime in the future instead of being hardcoded
     public bool spawnEnemies;
+    public bool runWaveSystem;
+    public bool isSpawningWave;
     public float enemySpawnDelay; //How long to wait between enemy spawns
 
     public List<GameObject> towerPrefabs; //0 = machine gun
     public Transform towersParent;
     public List<GameObject> enemyPrefabs;
     public Transform enemiesParent;
-    public List<GameObject> bulletPrefabs; //0 = normal, 1 = explosive
+    public GameObject bulletPrefab; //Is modified at runtime per tower to fit the TowerData's BulletData
     public Transform generatedPrefabsParent;
 
     public bool isPlacingTower;
@@ -30,11 +33,19 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        GeneratePrefabs();
+#if UNITY_EDITOR
         GenerateSampleXMLs();
+#endif
+        GeneratePrefabs();
+        SetupWaveSystem(levelID); //Eventually, this levelID parameter will likely be passed from a level select
+    }
 
-        LoadWave("test");
-        StartCoroutine(RunWave());
+    private void Update()
+    {
+        if (runWaveSystem)
+            WaveController();
+
+        GCode();
     }
 
     void GeneratePrefabs() //Spawns all tower and enemy prefabs so Awake methods in their scripts can set variables, then replaces their existing prefabs with these spawned versions
@@ -75,9 +86,29 @@ public class GameController : MonoBehaviour
         TowerData td = tc.td;
         if(td.upgradeLevels.Length >= tc.level && money >= td.upgradeLevels[tc.level - 1].cost) //If player can afford upgrade
         {
+            UpdateMoney(-td.upgradeLevels[tc.level - 1].cost);
             tc.UpdateData(td.upgradeLevels[tc.level - 1]);
             tc.level++;
             mUI.UpdateUpgradeUI(tc);
+        }
+    }
+    
+    public void SetupWaveSystem(Vector3 levelID)
+    {
+        this.levelID = levelID;
+        runWaveSystem = true;
+        spawnEnemies = true;
+        WaveController();
+    }
+
+    void WaveController()
+    {
+        if (enemiesParent.childCount == 0 && !isSpawningWave && levelID.z < maxWaves) //If there is no wave currently running, all enemies are dead, and there are more waves to be spawned
+        {
+            levelID.z++;
+            string path = "Waves\\Planet" + levelID.x + "\\Level" + levelID.y + "\\Wave" + levelID.z;
+            LoadWave(path);
+            StartCoroutine(RunWave());
         }
     }
 
@@ -92,8 +123,9 @@ public class GameController : MonoBehaviour
 
     IEnumerator RunWave()
     {
-        if (spawnEnemies) //If spawning is enabled (change to while to make looping waves)s
+        if (spawnEnemies) //If spawning is enabled (change to while to make looping waves)
         {
+            isSpawningWave = true;
             int enemyIndexToSpawn = 0; //The index in enemiesToSpawn that will be targetted
             while(enemyIndexToSpawn < enemiesToSpawn.Count) //While there are more enemy types to be spawned
             {
@@ -107,27 +139,26 @@ public class GameController : MonoBehaviour
                 enemyIndexToSpawn++;
             }
         }
+        isSpawningWave = false;
     }
 
-    public void UpdateMoney(int m, bool add) //Add/remove money; add true = add, add false = remove
+    public void UpdateMoney(int m) //Add/remove money & update UI value
     {
-        if (add)
-            money += m;
-        if (!add)
-            money -= m;
+        money += m;
         mUI.moneyTxt.text = "Money: $" + money;
     }
 
     // --- Wave Systems ---
 
-    void LoadWave(string xml)
+    void LoadWave(string resourcesPath)
     {
-        TextAsset xmlAsset = Resources.Load<TextAsset>("Waves/" + xml);
+        TextAsset xmlAsset = Resources.Load<TextAsset>(resourcesPath);
         Wave w = XMLOp.DeserializeXMLTextAsset<Wave>(xmlAsset);
 
         // \/ Line below will load xml from path instead
         //Wave w = XMLOp.Deserialize<Wave>("D:\\Game Stuff\\Game Making\\GGRemastered\\Galactic-Gauntlet-Remastered\\Assets\\Resources\\Waves\\test.xml");
 
+        enemiesToSpawn.Clear();
         foreach (Enemy e in w.Enemies)
             enemiesToSpawn.Add(e);
     }
@@ -146,7 +177,7 @@ public class GameController : MonoBehaviour
         foreach(GameObject enemyPrefab in enemyPrefabs)
         {
             EnemyController ec = enemyPrefab.GetComponent<EnemyController>();
-            Enemy e = new Enemy(ec.id, ec.name, 0, index + 1);
+            Enemy e = new Enemy(ec.id, ec.name, 0);
             w.Enemies[index] = e;
             index++;
         }
@@ -159,6 +190,13 @@ public class GameController : MonoBehaviour
         td.upgradeLevels = new UpgradeLevel[3];
         for(int i = 0; i < 3; i++)
             td.upgradeLevels[i] = new UpgradeLevel();
+        td.bulletData = new BulletData();
         XMLOp.Serialize(td, outPath);
+    }
+
+    void GCode()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            UpdateMoney(100);
     }
 }
