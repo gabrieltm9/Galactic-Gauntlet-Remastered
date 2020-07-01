@@ -87,6 +87,7 @@ public class GameController : MonoBehaviour
         if(td.upgradeLevels.Length >= tc.level && money >= td.upgradeLevels[tc.level - 1].cost) //If player can afford upgrade
         {
             UpdateMoney(-td.upgradeLevels[tc.level - 1].cost);
+            tc.price += td.upgradeLevels[tc.level - 1].cost;
             tc.UpdateData(td.upgradeLevels[tc.level - 1]);
             tc.level++;
             mUI.UpdateUpgradeUI(tc);
@@ -198,5 +199,7 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
             UpdateMoney(100);
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            Instantiate(enemyPrefabs[enemiesToSpawn[0].id], new Vector3(100, 0, 0), transform.rotation, enemiesParent); //Spawn enemy
     }
 }

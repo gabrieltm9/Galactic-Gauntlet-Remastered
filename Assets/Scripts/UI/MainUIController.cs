@@ -7,9 +7,11 @@ public class MainUIController : MonoBehaviour
 {
     public GameController gc;
 
+    public GameObject mainUI;
     public GameObject buyMenu;
     public TMP_Text moneyTxt;
     public List<TMP_Text> towerPrices;
+    public KeyCode toggleMainUIKey;
 
     public GameObject towerBeingPlaced;
 
@@ -62,6 +64,9 @@ public class MainUIController : MonoBehaviour
                 Destroy(towerBeingPlaced);
             }
         }
+
+        if (Input.GetKeyDown(toggleMainUIKey))
+            ToggleMainUI();
     }
 
     public void EnableUpgradeMenu(TowerController tc)
@@ -87,5 +92,10 @@ public class MainUIController : MonoBehaviour
             upgradeDescriptionTxt.text = tc.td.upgradeLevels[tc.level - 1].description;
             upgradePriceTxt.text = "$" + tc.td.upgradeLevels[tc.level - 1].cost;
         }
+    }
+
+    void ToggleMainUI()
+    {
+        mainUI.SetActive(!mainUI.activeSelf);
     }
 }

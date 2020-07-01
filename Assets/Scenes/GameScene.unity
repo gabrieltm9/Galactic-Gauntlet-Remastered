@@ -1057,7 +1057,6 @@ GameObject:
   - component: {fileID: 79717671}
   - component: {fileID: 79717670}
   - component: {fileID: 79717669}
-  - component: {fileID: 79717673}
   m_Layer: 5
   m_Name: MainUI
   m_TagString: Untagged
@@ -1138,42 +1137,14 @@ RectTransform:
   m_Children:
   - {fileID: 638088214}
   - {fileID: 1249240921}
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1602429960}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &79717673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 79717668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 975abb6832e563842975c82770630893, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gc: {fileID: 1235091106}
-  buyMenu: {fileID: 638088213}
-  moneyTxt: {fileID: 662034720}
-  towerPrices:
-  - {fileID: 766128964}
-  - {fileID: 2802364}
-  - {fileID: 1643704052}
-  towerBeingPlaced: {fileID: 0}
-  upgradeMenu: {fileID: 1249240920}
-  towerNameTxt: {fileID: 138450210}
-  rangeTxt: {fileID: 1323882368}
-  damageTxt: {fileID: 696569360}
-  fireRateTxt: {fileID: 1628212355}
-  levelTxt: {fileID: 919776316}
-  upgradeDescriptionTxt: {fileID: 1500848087}
-  upgradePriceTxt: {fileID: 1386074963}
 --- !u!1 &86880404
 GameObject:
   m_ObjectHideFlags: 0
@@ -6647,7 +6618,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 79717673}
+      - m_Target: {fileID: 0}
         m_MethodName: PlaceTower
         m_Mode: 3
         m_Arguments:
@@ -9301,7 +9272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 20
   money: 300
-  mUI: {fileID: 79717673}
+  mUI: {fileID: 1602429959}
   selectedTower: {fileID: 0}
   sellTowerKey: 113
   levelID: {x: 1, y: 1, z: 0}
@@ -12520,6 +12491,68 @@ Transform:
   m_Father: {fileID: 762428617}
   m_RootOrder: 55
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1602429958
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1602429960}
+  - component: {fileID: 1602429959}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1602429959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602429958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 975abb6832e563842975c82770630893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gc: {fileID: 1235091106}
+  mainUI: {fileID: 79717668}
+  buyMenu: {fileID: 638088213}
+  moneyTxt: {fileID: 662034720}
+  towerPrices:
+  - {fileID: 766128964}
+  - {fileID: 2802364}
+  - {fileID: 1643704052}
+  toggleMainUIKey: 122
+  towerBeingPlaced: {fileID: 0}
+  upgradeMenu: {fileID: 1249240920}
+  towerNameTxt: {fileID: 138450210}
+  rangeTxt: {fileID: 1323882368}
+  damageTxt: {fileID: 696569360}
+  fireRateTxt: {fileID: 1628212355}
+  levelTxt: {fileID: 919776316}
+  upgradeDescriptionTxt: {fileID: 1500848087}
+  upgradePriceTxt: {fileID: 1386074963}
+--- !u!4 &1602429960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602429958}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 931.5089, y: 545.6937, z: -3.1661377}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 79717672}
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1628212353
 GameObject:
   m_ObjectHideFlags: 0
@@ -13605,7 +13638,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 79717673}
+      - m_Target: {fileID: 0}
         m_MethodName: PlaceTower
         m_Mode: 3
         m_Arguments:
@@ -13841,7 +13874,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 79717673}
+      - m_Target: {fileID: 0}
         m_MethodName: PlaceTower
         m_Mode: 3
         m_Arguments:
