@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     public bool runWaveSystem;
     public bool isSpawningWave;
     public float enemySpawnDelay; //How long to wait between enemy spawns
+    public float defaultSpawningRate; //The "normal" spawning rate; After waves with custom spawning rates, the rate is reset to this value
 
     public List<GameObject> towerPrefabs; //0 = machine gun
     public Transform towersParent;
@@ -97,6 +98,7 @@ public class GameController : MonoBehaviour
     public void SetupWaveSystem(Vector3 levelID)
     {
         this.levelID = levelID;
+        enemySpawnDelay = defaultSpawningRate;
         runWaveSystem = true;
         spawnEnemies = true;
         WaveController();
@@ -107,6 +109,7 @@ public class GameController : MonoBehaviour
         if (enemiesParent.childCount == 0 && !isSpawningWave && levelID.z < maxWaves) //If there is no wave currently running, all enemies are dead, and there are more waves to be spawned
         {
             levelID.z++;
+            mUI.UpdateWaveCount((int) levelID.z, maxWaves);
             string path = "Waves\\Planet" + levelID.x + "\\Level" + levelID.y + "\\Wave" + levelID.z;
             LoadWave(path);
             StartCoroutine(RunWave());
@@ -162,6 +165,10 @@ public class GameController : MonoBehaviour
         enemiesToSpawn.Clear();
         foreach (Enemy e in w.Enemies)
             enemiesToSpawn.Add(e);
+        if (w.spawnRate != 0)
+            enemySpawnDelay = w.spawnRate;
+        else
+            enemySpawnDelay = defaultSpawningRate;
     }
 
     void GenerateSampleXMLs()

@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <Wave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <waveNumber>0</waveNumber>
-  <spawnRate>0</spawnRate>
+  <spawnRate>0.5</spawnRate>
   <Enemies>
     <Enemy>
       <id>0</id>
       <name>Test Enemy Gray</name>
-      <count>0</count>
+      <count>50</count>
     </Enemy>
     <Enemy>
       <id>1</id>
       <name>Test Enemy Red</name>
-      <count>0</count>
+      <count>50</count>
     </Enemy>
     <Enemy>
-      <id>1</id>
+      <id>2</id>
       <name>Test Enemy Blue</name>
-      <count>0</count>
+      <count>15</count>
     </Enemy>
   </Enemies>
 </Wave>

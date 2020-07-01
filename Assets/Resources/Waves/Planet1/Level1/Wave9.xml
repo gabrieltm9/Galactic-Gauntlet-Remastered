@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Wave xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <waveNumber>0</waveNumber>
+  <spawnRate>0.7</spawnRate>
+  <Enemies>
+    <Enemy>
+      <id>2</id>
+      <name>Test Enemy Blue</name>
+      <count>10</count>
+    </Enemy>
+  </Enemies>
+</Wave>

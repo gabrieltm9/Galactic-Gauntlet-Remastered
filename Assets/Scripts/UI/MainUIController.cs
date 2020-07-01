@@ -10,6 +10,7 @@ public class MainUIController : MonoBehaviour
     public GameObject mainUI;
     public GameObject buyMenu;
     public TMP_Text moneyTxt;
+    public TMP_Text waveCountTxt;
     public List<TMP_Text> towerPrices;
     public KeyCode toggleMainUIKey;
 
@@ -92,6 +93,16 @@ public class MainUIController : MonoBehaviour
             upgradeDescriptionTxt.text = tc.td.upgradeLevels[tc.level - 1].description;
             upgradePriceTxt.text = "$" + tc.td.upgradeLevels[tc.level - 1].cost;
         }
+        else
+        {
+            upgradeDescriptionTxt.text = "Fully Upgraded";
+            upgradePriceTxt.text = "";
+        }
+    }
+
+    public void UpdateWaveCount(int currentWave, int maxWaves)
+    {
+        waveCountTxt.text = "Wave: " + currentWave + "/" + maxWaves;
     }
 
     void ToggleMainUI()
